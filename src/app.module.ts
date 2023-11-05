@@ -1,18 +1,18 @@
 import { Logger, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
-import ormconfig from './config/ormconfig';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { AuthModule } from './auth/auth.module';
 import { OpenAiModule } from './open_ai/open_ai.module';
+import { configService } from './config/config.service';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // TypeOrmModule.forRoot(ormconfig as TypeOrmModuleOptions),
+    TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     AuthModule,
     OpenAiModule,
   ],

@@ -1,5 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Observable } from 'rxjs';
+import { configService } from 'src/config/config.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -7,7 +8,7 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log(request);
-    return true;
+    const token = request.headers['ai_assist_apiKey'];
+    return token == configService.getValue('AI_ASSIST_API_KEY');
   }
 }
