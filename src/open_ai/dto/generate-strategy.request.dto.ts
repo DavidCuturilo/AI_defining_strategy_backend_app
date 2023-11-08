@@ -2,10 +2,10 @@ export interface GenerateStrategyRequestDto {
   club: string;
   opponentClub: string;
   league: string;
-  desiredStrategy: Strategy[];
+  desiredStrategy: StrategyType[];
 }
 
-export enum Strategy {
+export enum StrategyType {
   ATTACK = 'Attack',
   DEFENSE = 'Defense',
   SPECIFIC_STRATEGY = 'Specific strategy',

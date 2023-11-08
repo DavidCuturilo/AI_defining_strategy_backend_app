@@ -8,12 +8,22 @@ import {
   ChatConfiguration,
   GenerateChatRequestDto,
 } from './dto/generate-chat.request.dto';
+import { SaveStrategyRequestDto } from './dto/save-strategy.request.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Strategy } from 'src/entities/strategy.entity';
+import { Repository } from 'typeorm';
+import { User } from 'src/entities/user.entity';
 
 @Injectable()
 export class OpenAiService {
   logger = new Logger('OpenAI Service');
   private openAI: OpenAI;
-  constructor() {
+  constructor(
+    @InjectRepository(Strategy)
+    private readonly strategyRepository: Repository<Strategy>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {
     this.openAI = new OpenAI({
       apiKey: configService.getValue('OPENAI_API_KEY'),
     });
@@ -68,5 +78,25 @@ export class OpenAiService {
     });
 
     return { message: chatGPT.choices[0].message.content };
+  }
+
+  async saveStrategy(strategyToSave: SaveStrategyRequestDto) {
+    const user = await this.userRepository.findOneOrFail({
+      where: { id: strategyToSave.userId },
+    });
+
+    delete strategyToSave.userId;
+    const data = { ...strategyToSave };
+    data['user'] = user;
+
+    await this.strategyRepository.save(data);
+    return { message: 'Strategy saved successfully!' };
+  }
+
+  async getSavedTactics(userId: number) {
+    const strategies = await this.strategyRepository.find({
+      where: { user: { id: userId } },
+    });
+    return strategies;
   }
 }
