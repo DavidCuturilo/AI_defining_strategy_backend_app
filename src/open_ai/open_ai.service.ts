@@ -99,4 +99,9 @@ export class OpenAiService {
     });
     return strategies;
   }
+
+  async removeStrategy(strategyId: number) {
+    await this.strategyRepository.delete({ id: strategyId });
+    return { message: 'Strategy removed successfully!' };
+  }
 }
