@@ -59,7 +59,7 @@ export class OpenAiService {
   async generateStrategy(generateStrategyRequest: GenerateStrategyRequestDto) {
     const strategy = generateStrategyRequest.desiredStrategy.join(', ');
     const message = `I need help. My team ${generateStrategyRequest.club} is playing against ${generateStrategyRequest.opponentClub} this week. 
-    Please provide me a competetive strategy against this team including ${strategy} strategy. 
+    Please provide me a competitive strategy against this team including ${strategy} strategy. 
     Also, write me their strengths and weaknesses and some important things you know. 
     When you mention ${generateStrategyRequest.club} say 'your club ${generateStrategyRequest.club}'.`;
 
