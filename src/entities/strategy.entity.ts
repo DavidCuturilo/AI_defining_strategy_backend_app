@@ -30,7 +30,7 @@ export class Strategy {
     nullable: true,
     enum: StrategyType,
   })
-  type: StrategyType;
+  type: StrategyType[];
 
   @ManyToOne(() => User, (user) => user.strategies)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

@@ -1,10 +1,4 @@
-import {
-  IsDefined,
-  IsString,
-  IsNumber,
-  IsArray,
-  ValidateNested,
-} from 'class-validator';
+import { IsArray, IsDefined, IsNumber, IsString } from 'class-validator';
 import { StrategyType } from './generate-strategy.request.dto';
 
 export class SaveStrategyRequestDto {
@@ -26,8 +20,7 @@ export class SaveStrategyRequestDto {
 
   @IsDefined()
   @IsArray()
-  @ValidateNested({ each: true })
-  type: StrategyType;
+  type: StrategyType[];
 
   @IsDefined()
   @IsNumber()
