@@ -1,8 +1,18 @@
 import { GenerateChatRequestDto } from './dto/generate-chat.request.dto';
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { OpenAiService } from './open_ai.service';
 import { GenerateStrategyRequestDto } from './dto/generate-strategy.request.dto';
 import { SaveStrategyRequestDto } from './dto/save-strategy.request.dto';
+import { UserAuthGuard } from 'src/guards/user.auth.guard';
 
 @Controller('open-ai')
 export class OpenAiController {
@@ -22,9 +32,10 @@ export class OpenAiController {
     return await this.openAIService.saveStrategy(data);
   }
 
-  @Get('saved-tactics/:id')
-  async getSavedTactics(@Param('id') userId: string) {
-    return await this.openAIService.getSavedTactics(+userId);
+  @UseGuards(UserAuthGuard)
+  @Get('saved-tactics')
+  async getSavedTactics(@Req() req) {
+    return await this.openAIService.getSavedTactics(req.userId);
   }
 
   @Delete('saved-tactics/:id')
